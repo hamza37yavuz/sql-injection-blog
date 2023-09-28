@@ -1,0 +1,539 @@
+SQL CHEET SHEET:
+
+DATA MANİPÜLASYON KOMUTLARI
+	Select
+	Update
+	Delete
+	Insert
+	Truncate
+-----------------------------------------------------------------
+VERI TABANI MANİPÜLASYON KOMUTLARI
+	Create
+	Alter
+	Drop
+
+*****************************************************************************************************
+
+SELECT
+	Tablolardan veri seçmek ve getirmek için kullanılır.
+	ÖRNEK KULLANIM:
+	SELECT * FROM CUSTOMERS
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+INSERT
+	Belirli bir tabloya yeni satır ekleme komutudur.
+	ÖRNEK KULLANIM:
+	INSERT INTO <TABLOADI> <KOLONLAR> VALUES <DEGERLER>
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+UPDATE 
+	Belirli bir tablodaki belirli bir satırı güncelleme komutudur. WHERE şartı ile kullanılır.
+	ÖRNEK KULLANIM:
+	UPDATE <tabloadı>
+	SET <sutun> = value
+	WHERE
+	UPDATE CUSTOMERS
+	SET NATION = 'TR', AGE = DATEDIFF(YEAR,BIRTHDATE,GETDATE())
+
+	SELECT * FROM CUSTOMERS
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+DELETE
+	Belirli bir tablodaki satırı silmemizi sağlar ama sıralı atan id değerlerinde boşluklar oluşmasına sebep olur
+	ÖRNEK KULLANIM:
+	DELETE FROM <tabloadı> WHERE
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	
+
+TRUNCATE
+	Tablonun içini boşaltmaya yarar id yi sıfırlar.
+	ÖRNEK KULLANIM:
+	TRUNCATE TABLE CUSTOMERS 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+WHERE
+	Bir dataset içerisinde filtreleme amacıyla kullanılır
+	SELECT * FROM CUSTOMERS WHERE GENDER = 'E'
+	=       :EŞİTTİR
+	<>      :EŞİT DEĞİLDİR
+	>       :BÜYÜKTÜR
+	<       :KÜÇÜKTÜR
+	>=      :BÜYÜK EŞİTTİR
+	<=      :KÜÇÜK EŞİTTİR
+	BETWEEN :ARASINDADIR
+	LIKE    :İLE BAŞLAR İLE BİTER %kelime  kelime%
+	IN      :İÇİNDEDİR            %kelime%
+	NOT LIKE:İLE BAŞLAMAZ BİTMEZ  %kelime  kelime%
+	NOT IN  :İÇİNDE DEĞİLDİR     
+
+	ÖRNEK KULLANIM:
+	SELECT * FROM CUSTOMERS WHERE CITY='İstanbul' 
+	SELECT * FROM CUSTOMERS WHERE BIRTHDATE>'1990-01-01'
+	SELECT * FROM CUSTOMERS WHERE AGE BETWEEN 40 AND 50
+	SELECT * FROM CUSTOMERS WHERE CUSTOMERNAME LIKE 'ALİ%' ALİ İLE BAŞLAYANLAR
+	SELECT * FROM CUSTOMERS WHERE CUSTOMERNAME LIKE '%ALP'
+	SELECT * FROM CUSTOMERS WHERE CITY IN ('ANKARA')
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+AND OR OPERATÖRLERİ
+	Birden fazla where şartını bir arada kullanmamıza yarar.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+DISTINCT
+	Bir tabloda yer alan aynı olan değerleri tekilleştirir.
+	ÖRNEK KULLANIM:
+	SELECT DISTINCT GENDER FROM CUSTOMERS
+	Yani cinsiyet değişkeninde kaç farklı kategori olduğu görülebilir
+	SELECT DISTINCT AGE FROM CUSTOMERS
+	Tekrar eden satırları tekilleşirerek getirir
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ORDER BY
+	Sıralama komutudur.
+	ÖRNEK KULLANIM:
+	SELECT <KOLONLAR> FROM <TABLOADI> WHERE <ŞARTLAR> ORDER BY KOLON ASC, KOLON2 DESC, KOLON3 ASC
+	SELECT * FROM CUSTOMERS ORDER BY AGE
+	SELECT * FROM CUSTOMERS ORDER BY CITY ASC, CUSTOMERNAME DESC
+	SELECT * FROM CUSTOMERS ORDER BY CITY ASC,DISTRICT, CUSTOMERNAME
+	SELECT * FROM CUSTOMERS WHERE CITY='İSTANBUL' ORDER BY 4 ASC,6, CUSTOMERNAME
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+TOP
+	Tablodaki en üstteki n değeri bize verir. Pandastaki head gibi...
+	ÖRNEK KULLANIM:
+	SELECT TOP N
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+AGGREGATE FUNCTIONS
+	SUM MIN MAX AVG COUNT gibi fonksiyonlarınin kullanımıdır.
+	pandas taki agg ile aynı
+	ÖRNEK KULLANIM:
+	SELECT SUM (PRICE),.......
+	FROM CUSTOMERS
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+GROUP BY
+	Elimizdeki datada çarprazlama inceleme yapmamızı sağlar.
+	pandastaki groupby() fonksiyonu ile aynı.
+	Aylara göre satış, şehirlere göre ciro vb.
+	ÖRNEK KULLANIM:
+	SELECT <KOLON> SUM(), COUNT(),MIN(),MAX(),AVG() FROM TABLOADI GROUP BY <KOLON> 
+	SELECT CITY, MAX(AGE) AS AVGAGE FROM CUSTOMERS GROUP BY CITY
+	
+	-------------------------------------------------------------
+
+	ÖRNEKLER
+	a) Ürün bazlı Satış rakamı görme
+	SELECT *,
+	CONVERT(DATEDATE_) AS DATE2
+	FROM SALES WHERE CITY = 'ANKARA'
+
+	Date içerisinde tarih ve saat bulunması sebebiyle date içerisinden bir 
+		gün ay yıl alanını farklı bir alana aktarma ihtiyacımız oılabilir.
+	ORDER BY DATE
+
+	SELECT * FROM SALES WHERE CITY = 'ANKARA' ORDER BY DATE_
+	SELECT * CONVERT(DATE,DATE_) AS DATE, * FROM SALES WHERE CITY = 'ANKARA' ORDER BY DATE_
+
+	Burada tarih değeri güncellenebilir. Önce yeni kolon oluşturlur.
+	Sonra o kolon update edilir.
+	UPDATE SALES SET DATE2 = CONVERT(DATE,DATE_)
+	
+	ANKARA'DAKİ SATIŞ DEĞERLERİ GÜNLERE GÖRE
+	SELECT CITY, DATE2, SUM(TOTALPRICE) AS TOTALPRICE
+	FROM SALES WHERE CITY='ANKARA' GROUP BY CITY, DATE2 ORDER BY CITY, DATE2
+
+	BİR GÜNÜN MAĞAZA BAZLI SATIŞLARI
+	SELECT CITY, DATE2, SUM(TOTALPRICE) AS TOTALPRICE WHERE DATE2 = '2019-01-01'
+	GROUP BY DATE2, CITY
+	ORDER BY DATE, SUM(TOTALPRICE) DESC
+
+	-------------------------------------------------------------
+	b) Aylara göre satışlar
+	MONTHNAME şeklinde değişken oluşturulur
+	UPDATE SALES SET MONTHNAME = '01.OCAK' WHERE DATEPART(MONTH,DATE2)=1
+
+	Yukarıdak işlem 12 ye kadar yapılır. Bu şekilde tüm aylar numaralanır ve isimlenir
+
+	Sonrasında monthname e göre group by yapılabilir
+	SELECT MONTHNAME_ , SUM(TOTALPRİCE) AS TOTALPRİCE FROM SALES GROUP BY MONTHNAME_ ORDER BY MONTHNAME_
+	
+	SELECT CITY, MONTHNAME_ , SUM(TOTALPRİCE) AS TOTALPRİCE
+	FROM SALES GROUP BY CITY, MONTHNAME_ ORDER BY CITY, MONTHNAME_
+	-----------------------------------------------------------------
+	
+	c) Ürün kategorilerine göre group by yapalım
+
+	SELECT CATEGORY1,CATEGORY2,CATEGORY3,CATEGORY4
+	SUM(TOTALPRICE) AS TOTALPRICE
+	COUNT(*) AS ROWCOUNT_
+	SUM(AMOUNT) AS TOTALAMOUNT
+	FROM SALES
+	GROUP BY CATEGORY1,CATEGORY2
+	ORDER BY CATEGORY1,CATEGORY2
+
+	-----------------------------------------------------------------
+
+	d) Mağazaların müşteri sayıları
+
+	SELECT CITY, COUNT(DISTINCT CUSTOMERNAME) AS UNIQUECUSTOMER,
+	COUNT(DISTINCT FICHENO) CUSTOMERCOUNT,
+	COUNT(*) ITEMCOUNT
+	FROM SALES WHERE MONTHNAME_='01.OCAK'
+	GROUP BY CITY
+	ORDER BY CITY
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+HAVING
+	İf şartı gibi bir şart verme yoludur.
+
+	ÖRNEK KULLANIM:
+	SELECT......
+	GROUP BY ...
+	HAVING COUNT(CUSTOMERNUM)>50
+	ORDER BY
+	
+	Belli bir cironun üstünde satış yapan şehirleri bulma:
+
+	SELECT CITY, SUM(TOTALPRICE)
+	FROM SALES
+	GROUP BY CITY
+	HAVING SUM(TOTALPRICE)<40000
+	ORDER BY SUM(TOTALPRICE) DESC
+	
+	WHERE ŞARTI AGG FUNCTIONLA BİRLİKTE KULLANILAMAMAKTADIR.
+
+*****************************************************************************************************	
+İKİ TABLOYU BİRLEŞTİRME
+	Bu birleştirme tam olarak birleştirme değildir.
+	Sadece iki ya da daha fazla sayıdaki tablonun eşleştirilerek görülmesidir.
+	ÖRNEK KULLANIM:
+	SELECT USERS.*, ADDRESS.ADDRESSTEXT FROM USERS,ADDRESS
+	WHERE USERS.ID=ADDRESS.USERID
+	AND USERS.ID=2
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ALIAS KULLANIMI
+	Tablodaki sutun isimlerinin kısaltma olarak kullanılmasına verilen addır.
+	Sutunlar için kısaltılmış isimler = operatörü ile kullanılır.
+	ÖRNEK KULLANIM:
+	SELECT 
+	U.NAMESURNAME AS ADSOYAD,
+	U.EMAIL MAILADRESI,
+	U.GENDER AS CINSIYET,
+	U.BIRTHDATE DOGUMTARIHI,
+	A.ADDRESSTEXT AS ACIKADRES
+	FROM
+	USERS U, ADDRESS A -- BURADA KISALTMA YAPIYORUZ
+	WHERE U.ID=A.USERID AND U.ID=4
+
+	-----------------------------------------------------------------
+
+	Aşağıdaki örnekler ilişkisel veri tabanları örnekleridir.
+	ÖRNEKLER:
+	a) İlişkisel veri tabanı örneği:
+	SELECT 
+	U.NAMESURNAME AS ADSOYAD,
+	U.EMAIL MAILADRESI,
+	U.GENDER AS CINSIYET,
+	U.BIRTHDATE DOGUMTARIHI,
+	A.ADDRESSTEXT AS ACIKADRES
+	FROM
+	USERS U, ADDRESS A, COUNTRIES C, CITIES CT, TOWNS T, DISTRICTS D
+	WHERE U.ID=A.USERID 
+	AND C.ID = A.COUNTRYID
+	AND CT.ID = A.CITYID
+	AND T.ID = A.TOWNID
+	AND D.ID = A.DISTRICTID
+	--BURADA BU TABLOLAR UZERİNDEN FONKSIYONLAR CALISTIRABILIRIZ
+	AND CT.CITY LIKE 'TRABZON'
+
+	ORDER BY U.NAMESURNAME
+
+	-----------------------------------------------------------------
+
+	b) Bir şehirde ve ilçede kaç kullanıcı var:
+	SELECT 
+	CT.CITY,COUNT(U.ID) AS KULLANICISAYISI,COUNT(DISTINCT D.DISTRICT) AS ILCESAYISI
+	FROM
+	USERS U, ADDRESS A, COUNTRIES C, CITIES CT, TOWNS T, DISTRICTS D
+	WHERE U.ID=A.USERID 
+	AND C.ID = A.COUNTRYID
+	AND CT.ID = A.CITYID
+	AND T.ID = A.TOWNID
+	AND D.ID = A.DISTRICTID
+	GROUP BY CT.CITY
+
+	-----------------------------------------------------------------
+
+	c) Kullanıcılardan ikiden fazla şehirde adresi olanlar:
+	SELECT 
+	U.NAMESURNAME,COUNT(A.ID) AS ADRESSAYISI,COUNT(DISTINCT CT.ID) AS SEHIRSAYISI
+	FROM
+	USERS U, ADDRESS A, COUNTRIES C, CITIES CT, TOWNS T, DISTRICTS D
+	WHERE U.ID=A.USERID 
+	AND C.ID = A.COUNTRYID
+	AND CT.ID = A.CITYID
+	AND T.ID = A.TOWNID
+	AND D.ID = A.DISTRICTID
+	GROUP BY U.NAMESURNAME
+	HAVING COUNT(A.ID)>2
+
+	-----------------------------------------------------------------
+
+	d) Joinle ilişkisel veri tabanı örnek kullanımı:
+	SELECT 
+	A.KOLON1,A.KOLON2,B.KOLON1,B.KOLON2
+	FROM TABLO1 A
+	JOIN TABLO2 B ON A.PK_KOLON=B.FK_KOLON
+
+	-----------------------------------------------------------------
+
+	e) Gerçek bir örnek:
+
+	SELECT 
+	U.NAMESURNAME,U.EMAIL,A.ADDRESSTEXT,C.COUNTRY,CT.CITY,T.TOWN,D.DISTRICT 
+	FROM
+	USERS U
+	JOIN ADDRESS A ON A.USERID=U.ID
+	JOIN COUNTRIES C ON C.ID=A.COUNTRYID
+	JOIN CITIES CT ON CT.ID=A.CITYID
+	JOIN TOWNS T ON T.ID=A.TOWNID
+	JOIN DISTRICTS D ON D.ID=A.DISTRICTID
+
+	-----------------------------------------------------------------
+
+	f) Fonksiyon kullanımı groupby ile hangi şehirde kaç kişi var:
+	SELECT 
+	CT.CITY,COUNT(U.ID) AS KULLANICISAYISI
+	FROM
+	USERS U
+	JOIN ADDRESS A ON A.USERID=U.ID
+	JOIN COUNTRIES C ON C.ID=A.COUNTRYID
+	JOIN CITIES CT ON CT.ID=A.CITYID
+	JOIN TOWNS T ON T.ID=A.TOWNID
+	JOIN DISTRICTS D ON D.ID=A.DISTRICTID
+	GROUP BY CT.CITY
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+JOIN KAVRAMI
+INNERJOIN
+	Kümelerin kesişimini alır, iki tablonun ortak noktasına bakarak tabloları getirir.
+	yukarıdaki d, e ve f şıkları örnek kullanımdır.	
+	-----------------------------------------------------------------
+LEFT (OUTER) JOIN
+	Sağ taraftaki kümenin hepsini getirir.
+	Sağ taraf ile kesişmeyen sol taraftaki kümenin verisi gelmez.
+	A ve B tablolarını düşünelim bu iki kümeden a kümesinin tüm elemanları bize getirilecek.
+
+	-----------------------------------------------------------------
+
+RIGHT (OUTER) JOİN
+	Left outer join'in tam tersidir.
+
+	-----------------------------------------------------------------
+
+FULL JOIN
+	İki kümenin birleşimini bize getirir. 
+	Ne var yok görürüz
+
+*****************************************************************************************************
+
+KAÇ PAGE OKUDU
+	Bu komutla mesajlarda kaç page kullanıldığı görülür.
+	Her page 8 kb olduğu bilinmelidir.
+	ÖRNEK KULLANIM:
+	SET STATISTICS IO ON
+	
+*****************************************************************************************************
+SUBQUERY
+	İç içe yapılan select işlemleri olarak tanımlanır.
+	Joinden genel kullanımda daha yavaştır. 
+	Okuduğu page sayısı joinden fazladır.
+	ÖRNEK KULLANIM:
+	SET STATISTICS IO ON
+	SELECT ITM.ITEMCODE AS URUNKODU,
+	ITM.ITEMNAME URUNADI,
+	(SELECT MIN(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT MAX(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT AVG(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT SUM(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT
+	FROM
+	ITEMS ITM
+	ORDER BY ITM.ITEMNAME
+	
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+JOINLE YAPILAMAYACAK SBQUERY İLE YAPILMASI GEREKEN ÖRNEK
+
+	a) Bir ürünün en çok satıldığı ay:
+
+	SELECT TOP 1 DATEPART(MONTH,O.DATE_) AS AY 
+	FROM 
+	ORDERDETAILS OD,ITEMS I
+	INNER JOIN ORDERS O ON OD.ORDE=
+	WHERE OD.ITEMID=I.ID
+	GROUP BY DATEPART(MONTH,O.DATE_)
+	ORDER BY SUM(AMOUNT) DESC 
+	
+	-----------------------------------------------------------------
+	
+	b) NULL değerleri görme:	
+
+	SET STATISTICS IO ON
+	SELECT ITM.ITEMCODE AS URUNKODU,
+	ITM.ITEMNAME URUNADI,
+	(SELECT MIN(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT MAX(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT AVG(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT,
+	(SELECT SUM(UNITPRICE) FROM ORDERDETAILS WHERE ITEMID = ITM.ID) AS ENDUSUKFIYAT
+	FROM
+	ITEMS ITM
+	WHERE ITM.ID NOT IN (SELECT ITEMID FROM ORDERDETAILS)
+	ORDER BY 3
+
+	-----------------------------------------------------------------
+	
+	c) Kullanıcının sipariş adresini bulma:	
+	SELECT U.*,
+	(SELECT TOP 1 ADDRESSTEXT FROM ADDRESS WHERE USERID=U.ID ORDER BY ID DESC) SONADRES,
+	(SELECT TOP 1 ADDRESSTEXT FROM ADDRESS WHERE USERID=U.ID ORDER BY ID) ILKADRES,
+	(SELECT COUNT(ADDRESSTEXT) FROM ADDRESS WHERE USERID=U.ID) ADRESSAYISI
+	FROM
+	USERS U
+
+*****************************************************************************************************
+
+STRİNGS İŞLEMLERİ
+	Genel fonksiyonları bir yazalım:
+	ASCII,CHAR,CHARINDEX,CONCAT,CONCAT_WS,DIFFRENCE,FORMAT,LEFT,LEN,LOWER,LTRIM,NCHAR,PATINDEX,QUOTENAME,TRIM,LOWER,UPPER.....
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+ASCII
+	Bir karakterin decimal ifadesini verir.
+	Seri port üzerinden veri alma ascıı standartında haberleşme olur.
+	Haberleşmede kullanılabilir.
+	ÖRNEK KULLANIMI:
+	SELECT ASCII('A')
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+CHAR	
+	ASCII fonksiyonunun tam tersidir.
+	ÖRNEK KULLANIMI:
+	SELECT CHAR(65)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+SUBSTRING
+	Stringi ayrıntılı bir şekilde parçalamamızı sağlayan fonksiyondur.
+	Kaç karakter alınması gerektiği fonksiyon içerisine yazılmalıdır.
+	Genelde WHERE şartıyla kullanılır.
+	ÖRNEK KULLANIM:
+	SELECT SUBSTRING('MUHAMMET HAMZA YAVUZ',1,4)
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+LEN 
+	İfadenin Uzunluğunu verir.
+	ÖRNEK KULLANIM: O İLE BİTEN KULLANICI ADLARINI BULMA
+	SELECT * FROM USER WHERE SUBSTRING(USERNAME,LEN(USERNAME),1='O'
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+CHARINDEX 
+	Bir string'in içinde başka bir string'i bulmak için kullanılabilir.
+	İlk bulduğunun indeksini getirir.
+	ÖRNEK KULLANIM:
+	SELECT CHARINDEX('U','HAMZA YAVUZ UUU')
+
+CONCAT 
+	String ifadeler için + işareti ile birleştirme yapılabilir.
+	ÖRNEK KULLANIM:
+	SELECT 'MUHAMMET' +'HAMZA'+'YAVUZ'
+	-----------------------------------------------------------------
+	Bunu için özelleşmiş bir fonksiyon concat bulunur.
+	ÖRNEK KULLANIM:
+	SELECT CONCAT('MUHAMMET ','HAMZA')
+	-----------------------------------------------------------------
+	Birleştirilen string'lerin arasına belirli bir ifade girmek için aşağıdaki şekilde kullanılabilir.
+	ÖRNEK KULLANIM:
+	SELECT CONCAT_WS(' ','HAMZA','YAVUZ')
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+FORMAT
+	Lokal olarak sayı ya da tarih ifadelerini belirli standartlara uygun şekilde yazmayı sağlar.
+	SELECT FORMAT(GETDATE(),'d','en-us') / İFADELERİNİ KULLANARAK YAZIYOR
+	SELECT FORMAT(GETDATE(),'D','en-us') YAZI İLE YAZIYOR
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+LEFT RIGHT
+	Sağdan ya da soldan belirli bir karakteri getirmek için kullanılır.
+	Ad soyad getirme örnekleri aşağıdadır.
+	SELECT LEFT('MUHAMMET HAMZA',8)
+	SELECT RIGHT('MUHAMMET HAMZA',5)
+	SELECT LEFT('MUHAMMET HAMZA',CHARINDEX(' ','MUHAMMET HAMZA'))
+	SELECT RIGHT('MUHAMMET HAMZA',LEN('MUHAMMET HAMZA')-LEN(CHARINDEX(' ','MUHAMMET HAMZA')))
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+TRIM LTRIM RTRIM
+	İfadenin içindeki boşlukları temizler.
+	ÖRNEK KULLANIM:
+	SELECT TRIM(' MUHAMMET HAMZA ')
+	-----------------------------------------------------------------
+	LTRIM LEFT TRIM ifadesinin kısaltmasıdır.
+	RTRİM RIGHT TRIM ifadesinin kısaltmasıdır.
+	ÖRNEK KULLANIM:
+	SELECT LTRIM(RTRIM(' MUHAMMET HAMZA '))
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+LOWER UPPER REVERSE REPLICATE	
+	Büyük harf ve küçük harf dönüştüme fonksiyonlarıdır.
+	ÖRNEK KULLANIM:
+	SELECT LOWER('ÖMER')
+	SELECT UPPER('ömer')
+
+	-----------------------------------------------------------------
+
+	İfadeyi tersine çevirir.
+	ÖRNEK KULLANIM:
+	SELECT REVERSE('ÖMER')
+
+	-----------------------------------------------------------------
+	
+	Veri tekrarı için kullanılır
+	ÖRNEK KULLANIM:
+	SELECT REPLICATE('0',10)
+	SIRAYLA YAZILAN RAKAMLAR DÜŞÜNELİM HER BİRİNDE 8 HANENİN DOLU OLMASI GEREKİYOR
+	1 2 ... 100 .... 1000 ... 20000 OLDUĞUNU DÜŞÜNELİM SOLA SIFIR EKLEYEREK GEREKEN KARAKTER SAYISINI TAMAMLAR
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+REPLACE
+	Bir karakterin ya da ifadenin değiştirilmesini sağlar
+	Bul ve yer değiştir.
+	SELECT REPLACE('MUHAMMET YAVUZ','MUHAMMET','MUHAMMET HAMZA')
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+DECLARE 	
+	Değişken tanımlamak için kullanılır.
+	DECLARE @CUMLE AS VARCHAR(MAX)
+
+	
